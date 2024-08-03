@@ -1,20 +1,20 @@
+const Flight = require('../models/Flight');
 const Ticket = require('../models/Ticket');
+const { sendEmail, sendSMS } = require('../utils/notifications');
 
-exports.searchTickets = async (req, res) => {
+exports.searchFlights = async (req, res) => {
     try {
-        const { destination, date, minPrice, maxPrice } = req.query;
+        const { from, to, date, type } = req.query;
         
-        let query = {};
-        if (destination) query.destination = new RegExp(destination, 'i');
-        if (date) query.date = new Date(date);
-        if (minPrice || maxPrice) {
-            query.price = {};
-            if (minPrice) query.price.$gte = Number(minPrice);
-            if (maxPrice) query.price.$lte = Number(maxPrice);
-        }
+        const query = {
+            from,
+            to,
+            departureTime: { $gte: new Date(date) },
+            type
+        };
 
-        const tickets = await Ticket.find(query);
-        res.json(tickets);
+        const flights = await Flight.find(query);
+        res.json(flights);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
@@ -23,19 +23,41 @@ exports.searchTickets = async (req, res) => {
 
 exports.bookTicket = async (req, res) => {
     try {
-        const { ticketId } = req.body;
-        const ticket = await Ticket.findById(ticketId);
+        const { flightId } = req.body;
+        const userId = req.user.id;
 
-        if (!ticket) {
-            return res.status(404).json({ message: 'Ticket not found' });
+        const flight = await Flight.findById(flightId);
+
+        if (!flight) {
+            return res.status(404).json({ message: 'Flight not found' });
         }
 
-        if (!ticket.available) {
-            return res.status(400).json({ message: 'Ticket is not available' });
+        if (flight.availableSeats <= 0) {
+            return res.status(400).json({ message: 'No available seats' });
         }
 
-        ticket.available = false;
+        flight.availableSeats -= 1;
+        await flight.save();
+
+        const ticket = new Ticket({
+            flight: flightId,
+            user: userId
+        });
+
         await ticket.save();
+
+        await sendEmail(
+            req.user.email,
+            'Ticket Booking Confirmation',
+            `Your ticket for ${flight.type} from ${flight.from} to ${flight.to} has been booked successfully.`
+        );
+
+        if (req.user.phone) {
+            await sendSMS(
+                req.user.phone,
+                `Your ticket for ${flight.type} from ${flight.from} to ${flight.to} has been booked successfully.`
+            );
+        }
 
         res.json({ message: 'Ticket booked successfully', ticket });
     } catch (error) {

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elysian - Sign In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+    <!-- <header>
+        <div class="logo">Elysian</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="offers.html">Offers</a></li>
+                <li><a href="seats.html">Seats</a></li>
+                <li><a href="destinations.html">Destinations</a></li>
+            </ul>
+        </nav>
+        <div class="right-nav">
+            <a href="#support">Support</a>
+            <a href="#language">Language</a>
+            <a href="login.html" class="active">Sign In</a>
+            <a href="signup.html">Sign Up</a>
+            <button class="contact-btn">Contact</button>
+        </div>
+    </header> -->
+
+    <main>
+        <section id="login">
+            <h2>Sign In to Elysian</h2>
+            <form id="login-form">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="login-email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button type="submit">Sign In</button>
+            </form>
+            <div class="divider">
+                <span>or</span>
+            </div>
+            <div id="google-signin-btn" class="google-btn">
+                <i class="fab fa-google"></i> Sign in with Google
+            </div>
+            <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Elysian</h3>
+                <p>Experience luxury travel like never before with Elysian.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: info@elysian.com</p>
+                <p>Phone: +1 (555) 123-4567</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Elysian Luxury Travel. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="/js/login.js"></script>
+</body>
+</html>
